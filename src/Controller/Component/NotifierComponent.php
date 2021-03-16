@@ -21,10 +21,14 @@ class NotifierComponent extends Component {
     }
 
     public function addEntity (Entity $entity) {
-        $this->_notification['entities'][] = [
+        return $this->addEntityItem([
             'entity_id'     => $entity->id,
             'entity_type'   => $entity->source()
-        ];
+        ]);
+    }
+
+    public function addEntityItem (array $entity = []) {
+        $this->_notification['entities'][] = $entity;
         return $this;
     }
 
