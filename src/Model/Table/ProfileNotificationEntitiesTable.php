@@ -10,9 +10,7 @@ class ProfileNotificationEntitiesTable extends NotifierBaseTable {
     public function __construct (array $config = []) {
         parent::__construct($config);
 
-        $this->belongsTo('ProfileNotifications', [
-            'className' => 'Notifier.ProfileNotifications'
-        ]);
+        $this->belongsTo('ProfileNotifications');
     }
 
     public function validationDefault(Validator $validator) {
