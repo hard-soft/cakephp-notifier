@@ -25,7 +25,7 @@ class ProfileNotificationsTable extends NotifierBaseTable {
         if (!empty($this->_entity_types)) {
             foreach ($this->_entity_types as $type) {
                 $this->belongsToMany($type, [
-                    'through'           => 'ProfileNotificationEntities',
+                    'through'           => 'Notifier.ProfileNotificationEntities',
                     'foreignKey'        => 'profile_notification_id',
                     'targetForeignKey'  => 'entity_id',
                     'conditions'        => ['entity_type' => $type]
