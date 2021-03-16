@@ -6,7 +6,7 @@ use Cake\Validation\Validator;
 
 use Notifier\Model\Table\NotifierBaseTable;
 
-class NotificationUsersTable extends NotifierBaseTable {
+class ProfileNotificationUsersTable extends NotifierBaseTable {
     public function __construct (array $config = []) {
         parent::__construct($config);
 
