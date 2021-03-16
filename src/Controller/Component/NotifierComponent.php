@@ -85,7 +85,7 @@ class NotifierComponent extends Component {
     }
 
     public function push (array $data = [], array $options = [], array $users = [], array $entities = []) {
-        if (!empty($data) || !empty($users) || !empty($options)) {
+        if (!empty($data) || !empty($options) || !empty($users) || !empty($entities)) {
             $this->create($data, $options, $users, $entities);
         }
 

@@ -20,7 +20,7 @@ class ProfileNotificationsTable extends NotifierBaseTable {
 
     public function push (array $data = [], array $options = [], array $users = [], array $entities = []) {
         $notification = $this->newEntity(['content' => $data] + $options);
-        return $this->getConnection()->transactional(function () use ($notification, $users) {
+        return $this->getConnection()->transactional(function () use ($notification, $users, $entities) {
             if ($this->save($notification)) {
                 if (empty($users)) return false;
 

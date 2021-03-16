@@ -14,8 +14,11 @@ class ProfileNotificationEntitiesTable extends NotifierBaseTable {
             'className' => 'Notifier.ProfileNotifications'
         ]);
     }
-    
+
     public function validationDefault(Validator $validator) {
+        $validator
+            ->requirePresence('profile_notification_id', 'create')
+            ->notEmptyString('profile_notification_id');
         $validator
             ->requirePresence('entity_type', 'create')
             ->notEmptyString('entity_type');
