@@ -2,23 +2,10 @@
 
 namespace Notifier\Model\Table;
 
-use Cake\Validation\Validator;
-
 use Notifier\Model\Table\NotifierBaseTable;
 
 class ProfileNotificationsTable extends NotifierBaseTable {
     protected $_serialized = ['content'];
-
-    public function validationDefault(Validator $validator) {
-        $validator
-            ->requirePresence('entity_type', 'create')
-            ->notEmptyString('entity_type');
-        $validator
-            ->requirePresence('entity_id', 'create')
-            ->notEmptyString('entity_id');
-
-        return $validator;
-    }
 
     public function __construct (array $config = []) {
         parent::__construct($config);
@@ -26,15 +13,30 @@ class ProfileNotificationsTable extends NotifierBaseTable {
         $this->hasMany('ProfileNotificationUsers', [
             'className' => 'Notifier.ProfileNotificationUsers'
         ]);
+        $this->hasMany('ProfileNotificationEntities', [
+            'className' => 'Notifier.ProfileNotificationEntities'
+        ]);
     }
 
-    public function push (array $data = [], array $users = [], array $options = []) {
+    public function push (array $data = [], array $options = [], array $users = [], array $entities = []) {
         $notification = $this->newEntity(['content' => $data] + $options);
         return $this->getConnection()->transactional(function () use ($notification, $users) {
             if ($this->save($notification)) {
                 if (empty($users)) return false;
 
-                $failure = collection($users)
+                $failure_entities = false;
+                if (!empty($entities)) {
+                    $failure_entities = collection($entities)
+                        ->map(function ($entity) use ($notification) {
+                            $notification_entity = $this->ProfileNotificationEntities->newEntity([
+                                'profile_notification_id'   => $notification->id
+                            ] + $entity);
+                            return $this->ProfileNotificationEntities->save($notification_entity);
+                        })
+                        ->contains(false);
+                }
+
+                $failure_users = collection($users)
                     ->map(function ($user_id) use ($notification) {
                         $notification_user = $this->ProfileNotificationUsers->newEntity([
                             'profile_notification_id'   => $notification->id,
@@ -43,7 +45,8 @@ class ProfileNotificationsTable extends NotifierBaseTable {
                         return $this->ProfileNotificationUsers->save($notification_user);
                     })
                     ->contains(false);
-                return !$failure;
+
+                return !$failure_users && !$failure_entities;
             }
             return false;
         });

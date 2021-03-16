@@ -10,21 +10,31 @@ use Cake\I18n\FrozenTime;
 class NotifierComponent extends Component {
     public $_notification = null;
 
-    public function create (array $data = [], array $users = [], array $options = []) {
+    public function create (array $data = [], array $options = [], array $users = [], array $entities = []) {
         $this->_notification = [
             'data'      => $data,
             'users'     => $users,
-            'options'   => $options
+            'options'   => $options,
+            'entities'  => $entities
         ];
         return $this;
     }
 
-    public function setEntity (Entity $entity) {
-        $this->_notification['options'] = array_merge($this->_notification['options'], [
-            'entity_id' => $entity->id,
-            'entity_type' => $entity->source()
-        ]);
+    public function addEntity (Entity $entity) {
+        $this->_notification['entities'][] = [
+            'entity_id'     => $entity->id,
+            'entity_type'   => $entity->source()
+        ];
         return $this;
+    }
+
+    public function setEntities (array $entities = []) {
+        $this->_notification['entities'] = $entities;
+        return $this;
+    }
+
+    public function getEntities () {
+        return $this->_notification['entities'];
     }
 
     public function setOptions (array $options = []) {
@@ -62,12 +72,20 @@ class NotifierComponent extends Component {
         return $this->_notification['options']['due'] ?? null;
     }
 
-    public function push (array $data = [], array $users = [], array $options = []) {
+    public function setType (int $type = null) {
+        return $this->setOptions(['type' => $type]);
+    }
+
+    public function getType () {
+        return $this->_notification['options']['type'] ?? null;
+    }
+
+    public function push (array $data = [], array $options = [], array $users = [], array $entities = []) {
         if (!empty($data) || !empty($users) || !empty($options)) {
-            $this->create($data, $users, $options);
+            $this->create($data, $options, $users, $entities);
         }
 
         $notificationsTable = TableRegistry::getTableLocator()->get('Notifier.ProfileNotifications');
-        return $notificationsTable->push($this->_notification['data'], $this->_notification['users'], $this->_notification['options']);
+        return $notificationsTable->push($this->_notification['data'], $this->_notification['options'], $this->_notification['users'], $this->_notification['entities']);
     }
 }
