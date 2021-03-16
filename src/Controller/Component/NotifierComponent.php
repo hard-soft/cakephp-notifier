@@ -67,7 +67,7 @@ class NotifierComponent extends Component {
             $this->create($data, $users, $options);
         }
 
-        $notificationsTable = TableRegistry::getTableLocator()->get('Notifier.Notifications');
+        $notificationsTable = TableRegistry::getTableLocator()->get('Notifier.ProfileNotifications');
         return $notificationsTable->push($this->_notification['data'], $this->_notification['users'], $this->_notification['options']);
     }
 }

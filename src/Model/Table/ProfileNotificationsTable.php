@@ -6,7 +6,7 @@ use Cake\Validation\Validator;
 
 use Notifier\Model\Table\NotifierBaseTable;
 
-class NotificationsTable extends NotifierBaseTable {
+class ProfileNotificationsTable extends NotifierBaseTable {
     protected $_serialized = ['content'];
 
     public function validationDefault(Validator $validator) {
@@ -23,8 +23,8 @@ class NotificationsTable extends NotifierBaseTable {
     public function __construct (array $config = []) {
         parent::__construct($config);
 
-        $this->hasMany('NotificationUsers', [
-            'className' => 'Notifier.NotificationUsers'
+        $this->hasMany('ProfileNotificationUsers', [
+            'className' => 'Notifier.ProfileNotificationUsers'
         ]);
     }
 
@@ -37,10 +37,10 @@ class NotificationsTable extends NotifierBaseTable {
                 $failure = collection($users)
                     ->map(function ($user_id) use ($notification) {
                         $notification_user = $this->NotificationUsers->newEntity([
-                            'notification_id' => $notification->id,
-                            'user_id'         => $user_id
+                            'profile_notification_id'   => $notification->id,
+                            'user_id'                   => $user_id
                         ]);
-                        return $this->NotificationUsers->save($notification_user);
+                        return $this->ProfileNotificationUsers->save($notification_user);
                     })
                     ->contains(false);
                 return !$failure;
