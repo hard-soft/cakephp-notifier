@@ -28,6 +28,8 @@ class NotifierBaseTable extends AppTable {
      * @return TableSchemas
      */
     protected function _initializeSchema(TableSchema $schema) {
+        $schema = parent::_initializeSchema($schema);
+        
         if (!empty($this->_serialized)) {
             foreach ($this->_serialized as $col) {
                 $schema->setColumnType($col, 'notifier.serialize');
