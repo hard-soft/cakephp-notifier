@@ -36,7 +36,7 @@ class ProfileNotificationsTable extends NotifierBaseTable {
 
                 $failure = collection($users)
                     ->map(function ($user_id) use ($notification) {
-                        $notification_user = $this->NotificationUsers->newEntity([
+                        $notification_user = $this->ProfileNotificationUsers->newEntity([
                             'profile_notification_id'   => $notification->id,
                             'user_id'                   => $user_id
                         ]);
