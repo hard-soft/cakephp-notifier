@@ -11,7 +11,7 @@ use Notifier\Database\Type\SerializeType;
 class NotifierBaseTable extends AppTable {
     protected $_serialized = [];
 
-        /**
+    /**
      * {@inheritdoc}
      */
     public function initialize(array $config = []) {
