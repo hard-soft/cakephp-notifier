@@ -10,11 +10,11 @@ use Cake\I18n\FrozenTime;
 class NotifierComponent extends Component {
     public $_notification = null;
 
-    public function create (array $data = []) {
+    public function create (array $data = [], array $users = [], array $options = []) {
         $this->_notification = [
             'data'      => $data,
-            'users'     => [],
-            'options'   => []
+            'users'     => $users,
+            'options'   => $options
         ];
         return $this;
     }
@@ -63,10 +63,8 @@ class NotifierComponent extends Component {
     }
 
     public function push (array $data = [], array $users = [], array $options = []) {
-        if (!empty($data) && !empty($users) && !empty($options)) {
-            $this->create($data)
-                ->setUsers($users)
-                ->setOptions($options);
+        if (!empty($data) || !empty($users) || !empty($options)) {
+            $this->create($data, $users, $options);
         }
 
         $notificationsTable = TableRegistry::getTableLocator()->get('Notifier.Notifications');

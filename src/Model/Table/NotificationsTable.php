@@ -7,7 +7,7 @@ use Cake\Validation\Validator;
 use Notifier\Model\Table\NotifierBaseTable;
 
 class NotificationsTable extends NotifierBaseTable {
-    protected $_serialized = ['variables'];
+    protected $_serialized = ['content'];
 
     public function validationDefault(Validator $validator) {
         $validator
@@ -29,11 +29,11 @@ class NotificationsTable extends NotifierBaseTable {
     }
 
     public function push (array $data = [], array $users = [], array $options = []) {
-        if (empty($users)) return false;
-
         $notification = $this->newEntity(['content' => $data] + $options);
         return $this->getConnection()->transactional(function () use ($notification, $users) {
             if ($this->save($notification)) {
+                if (empty($users)) return false;
+
                 $failure = collection($users)
                     ->map(function ($user_id) use ($notification) {
                         $notification_user = $this->NotificationUsers->newEntity([
