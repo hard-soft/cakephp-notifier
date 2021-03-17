@@ -10,7 +10,9 @@ class ProfileNotificationEntitiesTable extends NotifierBaseTable {
     public function __construct (array $config = []) {
         parent::__construct($config);
 
-        $this->belongsTo('ProfileNotifications');
+        $this->belongsTo('ProfileNotifications', [
+            'foreignKey' => 'profile_notification_id'
+        ]);
     }
 
     public function validationDefault(Validator $validator) {

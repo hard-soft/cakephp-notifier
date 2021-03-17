@@ -11,7 +11,9 @@ class ProfileNotificationUsersTable extends NotifierBaseTable {
     public function __construct (array $config = []) {
         parent::__construct($config);
 
-        $this->belongsTo('ProfileNotifications');
+        $this->belongsTo('ProfileNotifications', [
+            'foreignKey' => 'profile_notification_id'
+        ]);
     }
 
     public function validationDefault(Validator $validator) {
@@ -39,7 +41,12 @@ class ProfileNotificationUsersTable extends NotifierBaseTable {
     public function purge ($id = null) {
         if (!empty($id)) {
             $entity = $this->get($id);
+            $profile_notification_id = $entity->profile_notification_id;
             if ($this->delete($entity)) {
+                $notification = $this->ProfileNotifications->get($profile_notification_id, ['contain' => ['ProfileNotificationUsers', 'ProfileNotificationEntities']]);
+                if (count($notification->profile_notification_users) == 0) {
+                    $this->ProfileNotifications->delete($notification);
+                }
                 return true;
             }
         }

@@ -12,12 +12,14 @@ class ProfileNotificationsTable extends NotifierBaseTable {
         parent::__construct($config);
 
         $this->hasMany('ProfileNotificationUsers', [
-            'className' => 'Notifier.ProfileNotificationUsers',
-            'dependent' => true,
+            'className'     => 'Notifier.ProfileNotificationUsers',
+            'foreignKey'    => 'profile_notification_id',
+            'dependent'     => true,
         ]);
         $this->hasMany('ProfileNotificationEntities', [
-            'className' => 'Notifier.ProfileNotificationEntities',
-            'dependent' => true,
+            'className'     => 'Notifier.ProfileNotificationEntities',
+            'foreignKey'    => 'profile_notification_id',
+            'dependent'     => true,
         ]);
     }
 
@@ -30,7 +32,8 @@ class ProfileNotificationsTable extends NotifierBaseTable {
                     'through'           => 'Notifier.ProfileNotificationEntities',
                     'foreignKey'        => 'profile_notification_id',
                     'targetForeignKey'  => 'entity_id',
-                    'conditions'        => ['entity_type' => $type]
+                    'conditions'        => ['entity_type' => $type],
+                    'dependent'         => true,
                 ]);
             }
         }
