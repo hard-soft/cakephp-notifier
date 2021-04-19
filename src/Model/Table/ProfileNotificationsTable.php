@@ -72,4 +72,8 @@ class ProfileNotificationsTable extends NotifierBaseTable {
             return false;
         });
     }
+
+    public function getEntityTypes () {
+        return $this->_entity_types;
+    }
 }
