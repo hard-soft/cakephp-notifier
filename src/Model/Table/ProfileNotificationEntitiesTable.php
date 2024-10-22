@@ -1,33 +1,31 @@
 <?php
-
 namespace Notifier\Model\Table;
 
 use Cake\Validation\Validator;
-
 use Notifier\Model\Table\NotifierBaseTable;
 
 class ProfileNotificationEntitiesTable extends NotifierBaseTable {
-    public function __construct (array $config = []) {
-        parent::__construct($config);
+	public function __construct(array $config = []) {
+		parent::__construct($config);
 
-        $this->belongsTo('ProfileNotifications', [
-            'foreignKey' => 'profile_notification_id'
-        ]);
-    }
+		$this->belongsTo('ProfileNotifications', [
+			'foreignKey' => 'profile_notification_id',
+		]);
+	}
 
-    public function validationDefault(Validator $validator) {
-        $validator
-            ->requirePresence('profile_notification_id', 'create')
-            ->notEmptyString('profile_notification_id');
-        $validator
-            ->requirePresence('entity_type', 'create')
-            ->notEmptyString('entity_type');
-        $validator
-            ->requirePresence('entity_id', 'create')
-            ->notEmptyString('entity_id');
+	public function validationDefault(Validator $validator): Validator {
+		$validator
+			->requirePresence('profile_notification_id', 'create')
+			->notEmptyString('profile_notification_id');
+		$validator
+			->requirePresence('entity_type', 'create')
+			->notEmptyString('entity_type');
+		$validator
+			->requirePresence('entity_id', 'create')
+			->notEmptyString('entity_id');
 
-        return $validator;
-    }
+		return $validator;
+	}
 }
 
 ?>

@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use App\Model\Table\AppTable;
 use Cake\Database\Schema\TableSchema;
 use Notifier\Database\Type\SerializeType;
+use Cake\Database\Schema\TableSchemaInterface;
 
 class NotifierBaseTable extends AppTable {
 	protected $_serialized = [];
@@ -13,7 +14,7 @@ class NotifierBaseTable extends AppTable {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function initialize(array $config = []) {
+	public function initialize(array $config = []): void {
 		parent::initialize($config);
 
 		Type::map('notifier.serialize', SerializeType::class);
@@ -29,7 +30,7 @@ class NotifierBaseTable extends AppTable {
 	 * @param TableSchema $schema The table description
 	 * @return TableSchemas
 	 */
-	protected function _initializeSchema(TableSchema $schema) {
+	protected function _initializeSchema(TableSchemaInterface $schema): TableSchemaInterface {
 		$schema = parent::_initializeSchema($schema);
 
 		if (!empty($this->_serialized)) {
