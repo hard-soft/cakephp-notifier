@@ -23,7 +23,7 @@ class ProfileNotificationsTable extends NotifierBaseTable {
         ]);
     }
 
-    public function initialize(array $config = []) {
+    public function initialize(array $config = []):void {
         parent::initialize($config);
 
         if (!empty($this->_entity_types)) {
