@@ -22,23 +22,13 @@ class NotifierBaseTable extends AppTable {
 		if (Configure::check('Notifier.table_prefix')) {
 			$this->setTable(Configure::read('Notifier.table_prefix') . $this->getTable());
 		}
-	}
 
-	/**
-	 * Sets the column type for template_vars and headers to json.
-	 *
-	 * @param TableSchema $schema The table description
-	 * @return TableSchemas
-	 */
-	protected function _initializeSchema(TableSchemaInterface $schema): TableSchemaInterface {
-		$schema = parent::_initializeSchema($schema);
-
+		$schema = $this->getSchema();
 		if (!empty($this->_serialized)) {
 			foreach ($this->_serialized as $col) {
 				$schema->setColumnType($col, 'notifier.serialize');
 			}
 		}
-
-		return $schema;
+		$this->setSchema($schema);
 	}
 }
